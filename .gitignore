@@ -1,0 +1,3 @@
+.deveco/**
+.vscode/**
+
