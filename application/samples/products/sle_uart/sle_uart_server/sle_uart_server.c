@@ -44,7 +44,7 @@ uint16_t g_sle_pair_hdl;
 #define UUID_16BIT_LEN 2
 #define UUID_128BIT_LEN 16
 #define sample_at_log_print(fmt, args...) osal_printk(fmt, ##args)
-#define SLE_UART_SERVER_LOG "[sle uart server]"
+#define SLE_UART_SERVER_LOG "[sle uart server bearpi3863]"
 #define SLE_SERVER_INIT_DELAY_MS    1000
 static sle_uart_server_msg_queue g_sle_uart_server_msg_queue = NULL;
 static uint8_t g_sle_uart_base[] = { 0x37, 0xBE, 0xA8, 0x80, 0xFC, 0x70, 0x11, 0xEA, \

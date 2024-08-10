@@ -30,7 +30,7 @@
 #ifndef SLE_UART_SERVER_NAME
 #define SLE_UART_SERVER_NAME            "sle_uart_server"
 #endif
-#define SLE_UART_CLIENT_LOG             "[sle uart client]"
+#define SLE_UART_CLIENT_LOG             "[sle uart client bearpi3863]"
 
 static ssapc_find_service_result_t g_sle_uart_find_service_result = { 0 };
 static sle_announce_seek_callbacks_t g_sle_uart_seek_cbk = { 0 };

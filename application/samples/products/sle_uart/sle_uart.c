@@ -6,6 +6,14 @@
  * History: \n
  * 2023-07-17, Create file. \n
  */
+
+/**
+ * Copyright (c) 2019-FUTURE 浩瀚银河，版权所有. All rights reserved. \n
+ * 受Haohanyh Computer Software Products Open Source LICENSE保护 https://github.com/Hny0305Lin/LICENSE/blob/main/LICENSE
+ * 浩瀚银河只对sle_uart.c的修改内容保护，具体内容可参考LICENSE文件，或联系作者获得更多详细信息。
+ * 对此代码修改的内容如下：修改服务端/客户端对文本在串口uart上显示的处理，在Android上会做区分以及文本提取等处理，这才是关键的。
+ * 修改日期：2024-08-10
+ */
 #include "common_def.h"
 #include "soc_osal.h"
 #include "app_init.h"
@@ -84,22 +92,33 @@ static void uart_init_config(void)
 #define SLE_UART_SERVER_SEND_BUFF_MAX_LEN   40
 #endif
 unsigned long g_sle_uart_server_msgqueue_id;
-#define SLE_UART_SERVER_LOG                 "[sle uart server]"
+#define SLE_UART_SERVER_LOG                 "[sle uart server bearpi3863]"
+
 static void ssaps_server_read_request_cbk(uint8_t server_id, uint16_t conn_id, ssaps_req_read_cb_t *read_cb_para,
     errcode_t status)
 {
     osal_printk("%s ssaps read request cbk callback server_id:%x, conn_id:%x, handle:%x, status:%x\r\n",
         SLE_UART_SERVER_LOG, server_id, conn_id, read_cb_para->handle, status);
+    /* 
+        osal_printk("\n");
+        osal_printk("Let's start chatting, This is the content of the client: %x", write_cb_para->value);
+    */
 }
+
 static void ssaps_server_write_request_cbk(uint8_t server_id, uint16_t conn_id, ssaps_req_write_cb_t *write_cb_para,
     errcode_t status)
 {
     osal_printk("%s ssaps write request callback cbk server_id:%x, conn_id:%x, handle:%x, status:%x\r\n",
         SLE_UART_SERVER_LOG, server_id, conn_id, write_cb_para->handle, status);
+    /* 
+        osal_printk("\n");
+        osal_printk("Let's start chatting, This is the content of the client: %x", write_cb_para->value);
+    */
+    osal_printk("\n Let's start chatting, This is the content of the client:");
     if ((write_cb_para->length > 0) && write_cb_para->value) {
-        osal_printk("\n sle uart recived data : %s\r\n", write_cb_para->value);
         uapi_uart_write(CONFIG_SLE_UART_BUS, (uint8_t *)write_cb_para->value, write_cb_para->length, 0);
     }
+    osal_printk("\n");
 }
 
 #ifdef CONFIG_SAMPLE_SUPPORT_LOW_LATENCY_TYPE
@@ -237,8 +256,14 @@ void sle_uart_notification_cb(uint8_t client_id, uint16_t conn_id, ssapc_handle_
     unused(client_id);
     unused(conn_id);
     unused(status);
-    osal_printk("\n sle uart recived data : %s\r\n", data->data);
+    //osal_printk("\n sle uart recived data : %s\r\n", data->data);
+    //uapi_uart_write(CONFIG_SLE_UART_BUS, (uint8_t *)(data->data), data->data_len, 0);
+    
+    osal_printk("\n");
+    //osal_printk("Let's start chatting, This is the content of the server: %s", data->data);
+    osal_printk("\n Let's start chatting, This is the content of the server:");
     uapi_uart_write(CONFIG_SLE_UART_BUS, (uint8_t *)(data->data), data->data_len, 0);
+    osal_printk("\n");
 }
 
 void sle_uart_indication_cb(uint8_t client_id, uint16_t conn_id, ssapc_handle_value_t *data,
@@ -247,8 +272,14 @@ void sle_uart_indication_cb(uint8_t client_id, uint16_t conn_id, ssapc_handle_va
     unused(client_id);
     unused(conn_id);
     unused(status);
-    osal_printk("\n sle uart recived data : %s\r\n", data->data);
+    //osal_printk("\n sle uart recived data : %s\r\n", data->data);
+    //uapi_uart_write(CONFIG_SLE_UART_BUS, (uint8_t *)(data->data), data->data_len, 0);
+    
+    osal_printk("\n");
+    //osal_printk("Let's start chatting, This is the content of the server: %s", data->data);
+    osal_printk("\n Let's start chatting, This is the content of the server:");
     uapi_uart_write(CONFIG_SLE_UART_BUS, (uint8_t *)(data->data), data->data_len, 0);
+    osal_printk("\n");
 }
 
 static void sle_uart_client_read_int_handler(const void *buffer, uint16_t length, bool error)
