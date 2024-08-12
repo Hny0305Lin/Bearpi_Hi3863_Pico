@@ -18,7 +18,7 @@
 #define UART_DATA_BITS                     3
 #define UART_STOP_BITS                     1
 #define UART_PARITY_BIT                    0
-#define UART_TRANSFER_SIZE                 18
+#define UART_TRANSFER_SIZE                 512
 #define CONFIG_UART_INT_WAIT_MS            5
 
 #define UART_TASK_STACK_SIZE               0x1000
@@ -83,7 +83,7 @@ static void app_uart_write_int_handler(const void *buffer, uint32_t length, cons
 {
     unused(params);
     uint8_t *buff = (void *)buffer;
-    for (uint8_t i = 0; i < length; i++) {
+    for (uint32_t i = 0; i < length; i++) {
         osal_printk("uart%d write data[%d] = %d\r\n", CONFIG_UART_BUS_ID, i, buff[i]);
     }
     
@@ -101,10 +101,17 @@ static void *uart_task(const char *arg)
 
 #if defined(CONFIG_UART_INT_TRANSFER_MODE)
     osal_printk("uart%d int mode register receive callback start!\r\n", CONFIG_UART_BUS_ID);
-    if (uapi_uart_register_rx_callback(CONFIG_UART_BUS_ID, UART_RX_CONDITION_FULL_OR_SUFFICIENT_DATA_OR_IDLE,
+    // if (uapi_uart_register_rx_callback(CONFIG_UART_BUS_ID, UART_RX_CONDITION_FULL_OR_SUFFICIENT_DATA_OR_IDLE,
+    // uapi_uart_unregister_rx_callback(CONFIG_UART_BUS_ID);
+    if (uapi_uart_register_rx_callback(CONFIG_UART_BUS_ID, UART_RX_CONDITION_FULL_OR_IDLE,
                                        1, app_uart_read_int_handler) == ERRCODE_SUCC) {
         osal_printk("uart%d int mode register receive callback succ!\r\n", CONFIG_UART_BUS_ID);
     }
+    // osal_printk("uart%d int mode register receive callback start!\r\n", CONFIG_UART_BUS_ID);
+    // if (uapi_uart_register_rx_callback(CONFIG_UART_BUS_ID, UART_RX_CONDITION_FULL_OR_SUFFICIENT_DATA_OR_IDLE,
+    //                                    1, app_uart_read_int_handler) == ERRCODE_SUCC) {
+    //     osal_printk("uart%d int mode register receive callback succ!\r\n", CONFIG_UART_BUS_ID);
+    // }
 #endif
 
     while (1) {
