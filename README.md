@@ -1,3 +1,9 @@
+## 提示
+
+目前Github的Hny0305Lin的H3863仓库，和Gitee上的[H3863仓库](https://gitee.com/light-harmonyOS/bearpi-pico_h3863)有偏差，9月前完成互相同步工作。
+
+当然，只是有细微文件代码的区别。
+
 ## 产品概述
 
 
